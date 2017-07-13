@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            body {
+                margin:0px;
+                padding:0px;
+            }
+            div {
+                width:1000px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <h1>Data demo</h1>
+            <canvas id="canvas" width="1000" height="500" style="border:1px solid #d3d3d3;"></canvas>
+            <input id="slider" type="range" min="0" max="10" step="0.1" value="0" oninput="update(this.value)" onchange="update(this.value)">
+            <label id="sliderLabel" for="slider"></label>
+            <input type="button" value="Set Start" onclick="setRef()"/>
+        </div>
+    </body>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        var width = 1000;
+        var height = 500;
+        var currentTime = 0;
+        var ref = 0;
+        var lows = [];
+        var highs = [];
+        var lastValue = 0;
+        var lastLow = 0;
+        var lastHigh = 0;
+        var currLow = 0;
+        var curHigh = 0;
+        
+        function getPowerRatio(time) {
+            var s = Math.sin(time);
+            s = s + 1
+            return s / 2
+        }
+        
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.font = "30px Arial";
+            ctx.fillText("Power (0.0 to 1.0)", 10, 10 + 20);
+            ctx.fillText("Time", width - 80 ,height - 10);
+            ctx.fillStyle = "#0066cc";
+            
+            //draw data
+            ctx.beginPath();
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 5;
+            ctx.moveTo(0,0);
+            ctx.lineTo(0,height);
+            ctx.lineTo(width, height);
+            ctx.moveTo(0, height / 2);
+            for(var i = 0; i < 10; i = i + 0.1) {
+                ctx.lineTo(i * 80, (getPowerRatio(i) * height * 0.8) + (height * 0.1));
+            }
+            ctx.stroke();
+            //draw start to current time
+            ctx.beginPath();
+            ctx.strokeStyle = "#4CAF50";
+            ctx.lineWidth = 8;
+            ctx.moveTo(ref * 80, (getPowerRatio(ref) * height * 0.8) + (height * 0.1));
+            for(var i = ref; i < currentTime; i = i + 0.1) {
+                ctx.lineTo(i * 80, (getPowerRatio(i) * height * 0.8) + (height * 0.1));
+            }
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.strokeStyle = "blue";
+            ctx.lineWidth = 8;
+            ctx.moveTo(0, (currLow * height * 0.8) + (height * 0.1));
+            ctx.lineTo(width, (currLow * height * 0.8) + (height * 0.1));
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 8;
+            ctx.moveTo(0, (currHigh * height * 0.8) + (height * 0.1));
+            ctx.lineTo(width, (currHigh * height * 0.8) + (height * 0.1));
+            ctx.stroke();
+            
+            ctx.fillRect(currentTime * 80 - 10, (getPowerRatio(currentTime) * height * 0.8) + (height * 0.1) - 10, 20,20);
+            
+        }
+        
+        function updateExtrema() {
+            var value = getPowerRatio(currentTime);
+            if(lastValue < value) {
+                currLow = value;
+            }
+            if(lastValue > value) {
+                currHigh = value;
+            }
+            lastValue = value;
+        }
+        
+        function setTime(time) {
+            currentTime = time
+            document.getElementById("sliderLabel").innerHTML = "Time: " + currentTime;
+        }
+        
+        function setRef() {
+            ref = currentTime - 0.1;
+            lastValue = getPowerRatio(ref);
+            lows = [];
+            highs = [];
+            updateExtrema();
+            update(currentTime);
+        }
+        
+        function update(time) {
+            setTime(time);
+            updateExtrema();
+            draw();
+        }
+        update(0);
+    </script>
+</html>
