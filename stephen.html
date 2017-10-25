@@ -59,6 +59,8 @@
 				event.preventDefault();
 
 				document.removeEventListener( 'mousemove', onMouseMove, false );
+				
+				context.drawImage(testImage, Math.random() * canvas.width - 160, Math.random() * canvas.height, testImage.width, testImage.height);
 
 			}, false );
 
