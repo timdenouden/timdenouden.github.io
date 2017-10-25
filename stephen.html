@@ -1,0 +1,93 @@
+
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>stephen</title>
+		<style type="text/css">
+
+			body {
+				color: #ffffff;
+				background-color: #008000;
+				margin: 0px;
+				cursor: pointer;
+				overflow: hidden;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<img id="test" src="stephenSmall.png" style="display:none;"/>
+		<script>
+
+			var info = document.createElement( 'div' );
+			info.style.position = 'absolute';
+			info.style.top = '10px';
+			info.style.width = '100%';
+			info.style.fontFamily = 'Monospace';
+			info.style.textAlign = 'center';
+			info.innerHTML = 'click to stephen!';
+			document.body.appendChild( info );
+
+			var canvas = document.createElement( 'canvas' );
+			canvas.style.position = 'absolute';
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+			document.body.appendChild( canvas );
+
+			var context = canvas.getContext( '2d' );
+
+			var id = 52;
+
+			var cwidth = 71, cwidthhalf = cwidth / 2;
+			var cheight = 96, cheighthalf = cheight / 2;
+			
+			var testImage = document.getElementById("test");
+
+			document.addEventListener( 'mousedown', function ( event ) {
+
+				event.preventDefault();
+
+				document.addEventListener( 'mousemove', onMouseMove, false );
+
+			}, false );
+
+			document.addEventListener( 'mouseup', function ( event ) {
+
+				event.preventDefault();
+
+				document.removeEventListener( 'mousemove', onMouseMove, false );
+
+			}, false );
+
+			function onMouseMove( event ) {
+
+				event.preventDefault();
+
+				context.drawImage(testImage, Math.random() * canvas.width - 160, Math.random() * canvas.height, testImage.width, testImage.height);
+
+			}
+
+			document.addEventListener( 'touchstart', function ( event ) {
+
+				event.preventDefault();
+				
+				context.drawImage(testImage, Math.random() * canvas.width - 160, Math.random() * canvas.height, testImage.width, testImage.height);
+				
+
+			}, false );
+
+			document.addEventListener( 'touchmove', function ( event ) {
+
+				event.preventDefault();
+				
+				context.drawImage(testImage, Math.random() * canvas.width - 160, Math.random() * canvas.height, testImage.width, testImage.height);
+
+
+			}, false );
+
+		</script>
+	</body>
+</html>
